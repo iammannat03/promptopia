@@ -1,6 +1,5 @@
 import Prompt from "@models/prompt";
-
-const { connectToDB } = require("@utils/database");
+import { connectToDB } from "@utils/database";
 
 export const GET = async (request, { params }) => {
   try {
@@ -9,10 +8,11 @@ export const GET = async (request, { params }) => {
     const prompts = await Prompt.find({ creator: params.id }).populate(
       "creator"
     );
-    return new Response(JSON.stringify(prompts), { status: 201 });
+
+    return new Response(JSON.stringify(prompts), { status: 200 });
   } catch (error) {
-    return new Response(
-      JSON.stringify("Failed to fetch all prompts", { status: 500 })
-    );
+    return new Response("Failed to fetch prompts created by user", {
+      status: 500,
+    });
   }
 };
