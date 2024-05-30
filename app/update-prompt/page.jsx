@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Form from "@components/Form";
 import React from "react";
 
-const EditPrompt = () => {
+const EditPromptContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const promptId = searchParams.get("id");
@@ -26,7 +26,7 @@ const EditPrompt = () => {
     if (promptId) getPromptDetails();
   }, [promptId]);
 
-  const editPrompt = async (e) => {
+  const editPromptContent = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
@@ -52,14 +52,20 @@ const EditPrompt = () => {
   };
 
   return (
+    <Form
+      type="Edit"
+      post={post}
+      setPost={setPost}
+      submitting={submitting}
+      handleSubmit={editPromptContent}
+    />
+  );
+};
+
+const EditPrompt = () => {
+  return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Form
-        type="Edit"
-        post={post}
-        setPost={setPost}
-        submitting={submitting}
-        handleSubmit={editPrompt}
-      />
+      <EditPromptContent />
     </Suspense>
   );
 };
