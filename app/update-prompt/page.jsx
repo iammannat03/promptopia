@@ -1,37 +1,37 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Form from "@components/Form";
-import React from "react";
 
-const EditPromptContent = () => {
+import Form from "@components/Form";
+
+const UpdatePrompt = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const promptId = searchParams.get("id");
-  const [submitting, setSubmitting] = useState(false);
-  const [post, setPost] = useState({
-    prompt: "",
-    tag: "",
-  });
+
+  const [post, setPost] = useState({ prompt: "", tag: "" });
+  const [submitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const getPromptDetails = async () => {
       const response = await fetch(`/api/prompt/${promptId}`);
       const data = await response.json();
+
       setPost({
         prompt: data.prompt,
         tag: data.tag,
       });
     };
+
     if (promptId) getPromptDetails();
   }, [promptId]);
 
-  const editPrompt = async (e) => {
+  const updatePrompt = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
+    setIsSubmitting(true);
 
-    if (!promptId) return alert("Prompt ID not found");
+    if (!promptId) return alert("Missing PromptId!");
 
     try {
       const response = await fetch(`/api/prompt/${promptId}`, {
@@ -46,9 +46,9 @@ const EditPromptContent = () => {
         router.push("/");
       }
     } catch (error) {
-      console.log("error editing prompt: ", error.message);
+      console.log(error);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -58,17 +58,9 @@ const EditPromptContent = () => {
       post={post}
       setPost={setPost}
       submitting={submitting}
-      handleSubmit={editPrompt}
+      handleSubmit={updatePrompt}
     />
   );
 };
 
-const EditPrompt = () => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <EditPromptContent />
-    </Suspense>
-  );
-};
-
-export default EditPrompt;
+export default UpdatePrompt;
