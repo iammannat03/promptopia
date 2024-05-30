@@ -1,4 +1,5 @@
 "use client";
+
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Form from "@components/Form";
@@ -26,7 +27,7 @@ const EditPromptContent = () => {
     if (promptId) getPromptDetails();
   }, [promptId]);
 
-  const editPromptContent = async (e) => {
+  const editPrompt = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
@@ -57,7 +58,7 @@ const EditPromptContent = () => {
       post={post}
       setPost={setPost}
       submitting={submitting}
-      handleSubmit={editPromptContent}
+      handleSubmit={editPrompt}
     />
   );
 };
